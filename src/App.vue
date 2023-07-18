@@ -1,18 +1,45 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+  <img alt="Vue logo" src="./assets/logo.png" />
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
-import HelloWorld from './components/HelloWorld.vue';
+<script setup lang="ts">
+import Axios from "@/http/index";
+import { onMounted } from "vue";
+import { reactive } from "vue";
 
-export default defineComponent({
-  name: 'App',
-  components: {
-    HelloWorld
-  }
+onMounted(() => {
+  getSomeData();
+  postSomData();
 });
+
+let postData = reactive({});
+
+async function postSomData() {
+  try {
+    // post시 첫번째 인자느 url, 두번째는 body, 세번째는 header
+    const response = await Axios.post("/posts1", {
+      firstData: "body 첫번째 데이터",
+      secondData: "body 첫번째 데이터",
+      thirdData: "body 첫번째 데이터",
+    });
+    console.log(response);
+  } catch (error: any) {
+    console.log(error.message);
+  }
+}
+
+async function getSomeData() {
+  try {
+    const response = await Axios.get("/posts", {
+      params: {},
+    });
+    const data = response.data;
+    postData = data;
+    console.log(postData);
+  } catch {
+    throw new Error("에러발생 !!");
+  }
+}
 </script>
 
 <style>
